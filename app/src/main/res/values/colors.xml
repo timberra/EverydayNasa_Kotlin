@@ -4,5 +4,6 @@
     <color name="barIconColor">#A09D9A</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="layoutBackround">#99091F2A</color>
 
 </resources>

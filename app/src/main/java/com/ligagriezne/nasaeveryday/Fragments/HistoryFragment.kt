@@ -1,16 +1,24 @@
 package com.ligagriezne.nasaeveryday.Fragments
 
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CalendarView
+import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import com.ligagriezne.nasaeveryday.R
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+//
+private var selectedDate: String? = null
 
 /**
  * A simple [Fragment] subclass.
@@ -28,14 +36,23 @@ class HistoryFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val history: View = inflater.inflate(R.layout.fragment_history, container, false)
+        val calendarView = history.findViewById<CalendarView>(R.id.calendar)
+        val dateText = history.findViewById<TextView>(R.id.dateTextView)
+        calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+            selectedDate = LocalDate.of(year, month + 1, dayOfMonth).format(DateTimeFormatter.ISO_DATE)
+            dateText.text = selectedDate
+        }
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_history, container, false)
+        return history
     }
 
     companion object {
