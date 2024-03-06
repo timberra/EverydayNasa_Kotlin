@@ -32,19 +32,24 @@ class FavoriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val favorites = getSavedFavorites(requireContext())
-        val favoriteItems = favorites.map { parseFavoriteItem(it) }
+        val favoriteItems = favorites.mapNotNull { parseFavoriteItem(it) }
         adapter.updateData(favoriteItems) // Update adapter data with saved favorites
     }
 
+
     private fun getSavedFavorites(context: Context): Set<String> {
         val sharedPreferences = context.getSharedPreferences("favorites", Context.MODE_PRIVATE)
-        val favoritesString = sharedPreferences.getStringSet("favorites", setOf()) ?: setOf()
-        return favoritesString
+        val favoritesString = sharedPreferences.getString("favorites", "") ?: ""
+        return favoritesString.split(",").toSet()
     }
 
-    private fun parseFavoriteItem(favoriteString: String): FavoriteItem {
+    private fun parseFavoriteItem(favoriteString: String): FavoriteItem? {
         val parts = favoriteString.split("|")
-        return FavoriteItem(parts[0], parts[1]) // Format is "date|title"
+        return if (parts.size == 2) {
+            FavoriteItem(parts[0], parts[1])
+        } else {
+            null // Return null for invalid format
+        }
     }
 
     companion object {
