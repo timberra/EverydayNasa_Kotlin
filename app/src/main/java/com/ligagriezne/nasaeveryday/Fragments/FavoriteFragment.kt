@@ -1,6 +1,5 @@
 package com.ligagriezne.nasaeveryday.Fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ligagriezne.nasaeveryday.DailyPost
+import com.ligagriezne.nasaeveryday.DailyPostDatabase
 import com.ligagriezne.nasaeveryday.FavoriteAdapter
 import com.ligagriezne.nasaeveryday.FavoriteItem
 import com.ligagriezne.nasaeveryday.R
@@ -31,26 +32,25 @@ class FavoriteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val favorites = getSavedFavorites(requireContext())
-        val favoriteItems = favorites.mapNotNull { parseFavoriteItem(it) }
+        val favoriteItems = getSavedFavorites()
+            .map { item -> FavoriteItem(title = item.title, date = "") }
         adapter.updateData(favoriteItems) // Update adapter data with saved favorites
     }
 
 
-    private fun getSavedFavorites(context: Context): Set<String> {
-        val sharedPreferences = context.getSharedPreferences("favorites", Context.MODE_PRIVATE)
-        val favoritesString = sharedPreferences.getString("favorites", "") ?: ""
-        return favoritesString.split(",").toSet()
+    private fun getSavedFavorites(): List<DailyPost> {
+        val favoritesDb = DailyPostDatabase(requireContext())
+        return favoritesDb.getAllFavoritePosts()
     }
 
-    private fun parseFavoriteItem(favoriteString: String): FavoriteItem? {
-        val parts = favoriteString.split("|")
-        return if (parts.size == 2) {
-            FavoriteItem(parts[0], parts[1])
-        } else {
-            null // Return null for invalid format
-        }
-    }
+//    private fun parseFavoriteItem(favoriteString: String): FavoriteItem? {
+//        val parts = favoriteString.split("|")
+//        return if (parts.size == 2) {
+//            FavoriteItem(parts[0], parts[1])
+//        } else {
+//            null // Return null for invalid format
+//        }
+//    }
 
     companion object {
         @JvmStatic

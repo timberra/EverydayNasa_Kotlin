@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.ligagriezne.nasaeveryday.DailyPost
+import com.ligagriezne.nasaeveryday.DailyPostDatabase
 import com.ligagriezne.nasaeveryday.databinding.FragmentTodayBinding
 
 
@@ -31,7 +33,6 @@ class TodayFragment : Fragment() {
         viewModel.todayPost.observe(viewLifecycleOwner) { post ->
             binding.titleText.text = post.title
             binding.imageView.loadImage(post.imageUrl)
-//            binding.imageView.loadImageWithGlide(post.imageUrl)
             binding.todayDate.text = post.date
             binding.description.text = post.description
             binding.favoriteButton.setOnClickListener {
@@ -52,13 +53,10 @@ class TodayFragment : Fragment() {
 
     // Function to save post to SharedPreferences as a favorite
     private fun saveFavoriteToSharedPreferences(context: Context, post: TodayPostViewModel) {
-        val sharedPreferences = context.getSharedPreferences("favorites", Context.MODE_PRIVATE)
-        val favoritesString = sharedPreferences.getString("favorites", "") ?: ""
-        val favoritesSet = favoritesString.split(",").toMutableSet()
-        // You can choose a unique identifier here, for example, using the post title
-        favoritesSet.add(post.title)
-        sharedPreferences.edit().putString("favorites", favoritesSet.joinToString(",")).apply()
+        val favoritesDb = DailyPostDatabase(context)
+        favoritesDb.saveToFavorites(DailyPost(post.title))
     }
+
 
 
 
