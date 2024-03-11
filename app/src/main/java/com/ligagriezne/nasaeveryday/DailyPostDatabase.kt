@@ -25,7 +25,6 @@ class DailyPostDatabase(context: Context) {
     }
 
     fun getAllFavoritePosts(): MutableList<DailyPost> {
-        // JSON [{"title": "Post title of the day", "description": "asdhjfhksjd"}, {"title": "Post title of the day"}]
         val favoritesString = sharedPreferences.getString(FAVORITES_KEY, "")
         // Turn string back into the list of objets
         val result: MutableList<DailyPost> = try {
@@ -38,6 +37,12 @@ class DailyPostDatabase(context: Context) {
             mutableListOf()
         }
         return result
+    }
+    fun deleteFromFavorites(post: DailyPost) {
+        val allPosts = getAllFavoritePosts()
+        allPosts.remove(post)
+        val allPostsString = Gson().toJson(allPosts)
+        sharedPreferences.edit().putString(FAVORITES_KEY, allPostsString).apply()
     }
 
 }
