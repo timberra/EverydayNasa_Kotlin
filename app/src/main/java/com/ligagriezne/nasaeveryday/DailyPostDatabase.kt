@@ -38,16 +38,19 @@ class DailyPostDatabase(context: Context) {
         }
         return result
     }
+
     fun deleteFromFavorites(post: DailyPost) {
         val allPosts = getAllFavoritePosts()
-        allPosts.remove(post)
+        allPosts.remove(allPosts.find { it.title == post.title })
         val allPostsString = Gson().toJson(allPosts)
         sharedPreferences.edit().putString(FAVORITES_KEY, allPostsString).apply()
     }
-
 }
 
 data class DailyPost(
-    val title: String
+    val title: String,
+    val date: String,
+    val url: String,
+    val explanation: String
 )
 

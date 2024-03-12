@@ -54,11 +54,15 @@ class TodayFragment : Fragment() {
     // Function to save post to SharedPreferences as a favorite
     private fun saveFavoriteToSharedPreferences(context: Context, post: TodayPostViewModel) {
         val favoritesDb = DailyPostDatabase(context)
-        favoritesDb.saveToFavorites(DailyPost(post.title))
+        favoritesDb.saveToFavorites(
+            DailyPost(
+                post.title,
+                post.date,
+                post.imageUrl,
+                post.description
+            )
+        )
     }
-
-
-
 
     // Called when the view is about to go in background or gets destroyed.
     override fun onPause() {

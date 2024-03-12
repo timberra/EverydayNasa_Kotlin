@@ -37,11 +37,15 @@ class FavoriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val favoriteItems = getSavedFavorites()
-            .map { item -> FavoriteItem(title = item.title, date = "") }
+            .map { item ->
+                FavoriteItem(
+                    title = item.title,
+                    date = item.date ?: "",
+                    url = item.url ?: "",
+                    explanation = item.explanation ?: ""
+                )
+            }
         adapter.updateData(favoriteItems) // Update adapter data with saved favorites
-//        adapter = FavoriteAdapter(requireActivity())
-//        recyclerView.adapter = adapter
-
 
         val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
@@ -107,7 +111,10 @@ class FavoriteFragment : Fragment() {
     // Function to delete item from the database
     private fun deleteItemFromDatabase(deletedItem: FavoriteItem) {
         val favoritesDb = DailyPostDatabase(requireContext())
-        favoritesDb.deleteFromFavorites(DailyPost(deletedItem.title))
+        val removablePost = DailyPost(
+            deletedItem.title, deletedItem.date, deletedItem.url, deletedItem.explanation
+        )
+        favoritesDb.deleteFromFavorites(removablePost)
     }
 
     private fun getSavedFavorites(): List<DailyPost> {
