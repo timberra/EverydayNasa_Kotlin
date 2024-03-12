@@ -42,6 +42,7 @@ class FavoriteFragment : Fragment() {
 //        adapter = FavoriteAdapter(requireActivity())
 //        recyclerView.adapter = adapter
 
+
         val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
         ) {
