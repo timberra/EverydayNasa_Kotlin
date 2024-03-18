@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/barColor"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -9,18 +10,20 @@
         android:id="@+id/favoriteDateTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
         android:layout_marginBottom="8dp"
-        android:text="Date"/>
+        android:fontFamily="monospace"
+        android:text="Date"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/favoriteTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
-        android:text="Title"/>
+        android:fontFamily="monospace"
+        android:text="Title"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
 
 </LinearLayout>
