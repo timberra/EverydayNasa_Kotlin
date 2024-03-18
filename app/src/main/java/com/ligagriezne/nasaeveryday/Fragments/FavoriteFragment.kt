@@ -1,10 +1,15 @@
 package com.ligagriezne.nasaeveryday.Fragments
 
 import android.graphics.Canvas
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -21,6 +26,7 @@ class FavoriteFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: FavoriteAdapter
+    private lateinit var sortSpinner: Spinner
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,25 +34,69 @@ class FavoriteFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_favorite, container, false)
         recyclerView = view.findViewById(R.id.favoriteRecyclerView)
+        sortSpinner = view.findViewById(R.id.sortSpinner)
+
         adapter = FavoriteAdapter(emptyList()) // Initialize adapter with an empty list
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        // Initialize spinner with sorting options
+        val sortingOptions = arrayOf("Newest to Oldest", "Oldest to Newest")
+        val spinnerAdapter = object : ArrayAdapter<String>(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            sortingOptions
+        ) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getView(position, convertView, parent)
+                val textView = view.findViewById<TextView>(android.R.id.text1)
+                textView.typeface = Typeface.MONOSPACE
+                return view
+            }
+
+            override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getDropDownView(position, convertView, parent)
+                val textView = view.findViewById<TextView>(android.R.id.text1)
+                textView.typeface = Typeface.MONOSPACE
+                return view
+            }
+        }
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        sortSpinner.adapter = spinnerAdapter
+
+        // Set listener for spinner item selection
+        sortSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                // Update RecyclerView data based on selected sorting option
+                val favorites = getSavedFavorites()
+                val sortedFavorites = if (position == 0) {
+                    favorites.sortedByDescending { it.date }
+                } else {
+                    favorites.sortedBy { it.date }
+                }
+                val favoriteItems = sortedFavorites.map { item ->
+                    FavoriteItem(
+                        title = item.title,
+                        date = item.date ?: "",
+                        url = item.url ?: "",
+                        explanation = item.explanation ?: ""
+                    )
+                }
+                adapter.updateData(favoriteItems)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Do nothing
+            }
+        }
+
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val favoriteItems = getSavedFavorites()
-            .map { item ->
-                FavoriteItem(
-                    title = item.title,
-                    date = item.date ?: "",
-                    url = item.url ?: "",
-                    explanation = item.explanation ?: ""
-                )
-            }
-        adapter.updateData(favoriteItems) // Update adapter data with saved favorites
 
+        // Swipe to delete functionality
         val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
         ) {
@@ -131,4 +181,3 @@ class FavoriteFragment : Fragment() {
             }
     }
 }
-
