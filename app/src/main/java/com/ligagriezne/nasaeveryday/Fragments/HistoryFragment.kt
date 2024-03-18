@@ -34,6 +34,8 @@ class HistoryFragment : Fragment() {
         val dateText = history.findViewById<TextView>(R.id.dateTextView)
         val findButton = history.findViewById<Button>(R.id.buttonFind)
 
+        dateText.text = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
+
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             selectedDate = LocalDate.of(year, month + 1, dayOfMonth).format(DateTimeFormatter.ISO_DATE)
             dateText.text = selectedDate
