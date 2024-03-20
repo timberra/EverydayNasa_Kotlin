@@ -21,7 +21,7 @@
         android:layout_width="0dp"
         android:layout_height="23dp"
         android:background="@color/barIconColor"
-        android:popupBackground="@color/white"
+        android:popupBackground="@color/lightPurple"
         android:spinnerMode="dialog"
         android:textAlignment="center"
         android:typeface="monospace"

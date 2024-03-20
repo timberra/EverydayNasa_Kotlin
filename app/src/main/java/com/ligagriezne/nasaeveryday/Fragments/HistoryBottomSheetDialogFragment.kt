@@ -25,7 +25,7 @@ class HistoryBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        view.updateHeight(resources.calcDialogHeight()) // Give a const height
+
 
         // Retrieve arguments
         val title = arguments?.getString("title")
@@ -57,9 +57,9 @@ class HistoryBottomSheetDialogFragment : BottomSheetDialogFragment() {
                 arguments?.getString("explanation").toString()
             )
         )
-        //Doesnt work TO-DO
         Toast.makeText(requireContext(), "Added to favorites", Toast.LENGTH_SHORT).show()
     }
+
 
     companion object {
         @JvmStatic

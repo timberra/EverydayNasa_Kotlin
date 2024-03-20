@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="barColor">#F2091F2A</color>
-    <color name="barIconColor">#A09D9A</color>
+    <color name="barColor">#37436D</color>
+    <color name="barIconColor">#C9CAD9</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="layoutBackround">#99091F2A</color>
+    <color name="layoutBackground">#576490</color>
+    <color name="lightPurple">#D1D2F9</color>
+    <color name="splashBackground">#D1D2F9</color>
 
 </resources>

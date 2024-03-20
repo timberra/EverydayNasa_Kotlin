@@ -1,5 +1,7 @@
 package com.ligagriezne.nasaeveryday
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -9,6 +11,11 @@ import com.ligagriezne.nasaeveryday.Fragments.HistoryFragment
 import com.ligagriezne.nasaeveryday.Fragments.TodayFragment
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        fun getIntent(context: Context): Intent {
+            return Intent(context, MainActivity::class.java)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

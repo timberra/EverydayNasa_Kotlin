@@ -56,7 +56,10 @@ dependencies {
 
     implementation ("it.xabaras.android:recyclerview-swipedecorator:1.4")
 
-    implementation ("com.google.android.material:material:1.5.0")
+    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation ("com.google.android.material:material:1.11.0")
+
+    implementation ("com.google.android.material:material:1.11.0")
 
 
     // view model

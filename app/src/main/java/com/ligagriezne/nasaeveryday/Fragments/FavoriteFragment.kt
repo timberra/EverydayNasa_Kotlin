@@ -136,7 +136,7 @@ class FavoriteFragment : Fragment() {
                     .addBackgroundColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.layoutBackround
+                            R.color.layoutBackground
                         )
                     )
                     .addActionIcon(R.drawable.delete_icon)

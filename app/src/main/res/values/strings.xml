@@ -8,4 +8,6 @@
     <string name="date">Date</string>
     <string name="description">Description</string>
     <string name="datetextview">DateTextView</string>
+    <string name="find">Find</string>
+    <string name="set_the_date">Set the Date</string>
 </resources>

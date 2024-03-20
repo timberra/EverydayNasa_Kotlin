@@ -67,8 +67,7 @@ class HistoryFragment : Fragment() {
             // Pass fetched data to bottom sheet dialog
             showBottomSheetDialog(data.title, data.date, data.url, data.explanation)
         } else {
-            // Handle error
-            // You might want to display an error message to the user
+
         }
     }
 
