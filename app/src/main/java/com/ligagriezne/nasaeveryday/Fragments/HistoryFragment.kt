@@ -10,13 +10,13 @@ import android.widget.CalendarView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.ligagriezne.nasaeveryday.NasaDataModel
 import com.ligagriezne.nasaeveryday.NasaRepositoryImpl
 import com.ligagriezne.nasaeveryday.R
 import com.ligagriezne.nasaeveryday.Result
 import com.ligagriezne.nasaeveryday.Success
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -53,7 +53,7 @@ class HistoryFragment : Fragment() {
         // Ensure selectedDate is not null before making the API call
         selectedDate?.let {
             // Make API call to fetch data for the selected date
-            GlobalScope.launch(Dispatchers.Main) {
+            lifecycleScope.launch(Dispatchers.Main) {
                 val result: Result<NasaDataModel> = NasaRepositoryImpl.getPostByDate(selectedDate)
                 handleResult(result)
             }

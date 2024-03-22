@@ -1,12 +1,11 @@
 package com.ligagriezne.nasaeveryday
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.ligagriezne.nasaeveryday.Fragments.FavoriteBottomSheetDialogFragment
+import com.ligagriezne.nasaeveryday.databinding.FavoriteCellBinding
 
 class FavoriteAdapter(private var favorites: List<FavoriteItem>) :
     RecyclerView.Adapter<FavoriteAdapter.ViewHolder>() {
@@ -18,9 +17,9 @@ class FavoriteAdapter(private var favorites: List<FavoriteItem>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.favorite_cell, parent, false)
-        return ViewHolder(view)
+        val binding =
+            FavoriteCellBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -31,47 +30,28 @@ class FavoriteAdapter(private var favorites: List<FavoriteItem>) :
         return favorites.size
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(private val binding: FavoriteCellBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        private val context = binding.root.context
 
-        private val titleTextView: TextView = itemView.findViewById(R.id.favoriteTitleTextView)
-        private val dateTextView: TextView = itemView.findViewById(R.id.favoriteDateTextView)
-        private val context = itemView.context
-
-        private var title = ""
-        private var date = ""
-        private var explanation = ""
-        private var imageURL = ""
-
-        init {
-            // Set click listener for the item view (cell)
+        fun bind(favoriteItem: FavoriteItem) {
             itemView.setOnClickListener {
                 // Create and show the bottom sheet dialog
                 val bottomSheetDialogFragment = FavoriteBottomSheetDialogFragment.newInstance(
-                    title,
-                    date,
-                    imageURL,
-                    explanation
+                    favoriteItem.title,
+                    favoriteItem.date,
+                    favoriteItem.url,
+                    favoriteItem.explanation
                 )
                 bottomSheetDialogFragment.show(
                     (context as AppCompatActivity).supportFragmentManager,
                     bottomSheetDialogFragment.tag
                 )
             }
+            binding.favoriteTitleTextView.text = favoriteItem.title
+            binding.favoriteDateTextView.text = favoriteItem.date
         }
 
-        fun bind(favoriteItem: FavoriteItem) {
-            title = favoriteItem.title
-            date = favoriteItem.date
-            explanation = favoriteItem.explanation
-            imageURL = favoriteItem.url
-
-            setTextFields()
-        }
-
-        fun setTextFields() {
-            titleTextView.text = title
-            dateTextView.text = date
-        }
     }
 
     fun removeItem(position: Int): FavoriteItem {

@@ -31,15 +31,13 @@ class TodayFragment : Fragment() {
         super.onResume()
         viewModel.bind()
         viewModel.todayPost.observe(viewLifecycleOwner) { post ->
-            binding.titleText.text = post.title
-            binding.imageView.loadImage(post.imageUrl)
-            binding.todayDate.text = post.date
-            binding.description.text = post.description
-            binding.favoriteButton.setOnClickListener {
-                // Save the current post to favorites
-                saveFavoriteToSharedPreferences(requireContext(), post)
-                Toast.makeText(requireContext(), "Added to favorites", Toast.LENGTH_SHORT).show()
-            }
+            DailyPostViewHolder(binding).bind(
+                post.toDailyPostViewModel {
+                    saveFavoriteToSharedPreferences(requireContext(), post)
+                    Toast.makeText(requireContext(), "Added to favorites", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            )
         }
 
         // Observe showToast LiveData to display toast messages

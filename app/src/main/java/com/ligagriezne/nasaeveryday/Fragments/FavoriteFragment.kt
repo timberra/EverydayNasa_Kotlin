@@ -22,6 +22,8 @@ import com.ligagriezne.nasaeveryday.FavoriteItem
 import com.ligagriezne.nasaeveryday.R
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
+private const val SORT_DESCENDING = 0
+
 class FavoriteFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
@@ -54,7 +56,11 @@ class FavoriteFragment : Fragment() {
                 return view
             }
 
-            override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+            override fun getDropDownView(
+                position: Int,
+                convertView: View?,
+                parent: ViewGroup
+            ): View {
                 val view = super.getDropDownView(position, convertView, parent)
                 val textView = view.findViewById<TextView>(android.R.id.text1)
                 textView.typeface = Typeface.MONOSPACE
@@ -66,10 +72,15 @@ class FavoriteFragment : Fragment() {
 
         // Set listener for spinner item selection
         sortSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 // Update RecyclerView data based on selected sorting option
                 val favorites = getSavedFavorites()
-                val sortedFavorites = if (position == 0) {
+                val sortedFavorites = if (position == SORT_DESCENDING) {
                     favorites.sortedByDescending { it.date }
                 } else {
                     favorites.sortedBy { it.date }
