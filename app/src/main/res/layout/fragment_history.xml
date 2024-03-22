@@ -4,19 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/barIconColor"
     tools:context=".MainActivity">
 
-    <!-- Add TextView to display the date -->
-
-    <!-- Add CalendarView to display the Calendar -->
 
     <TextView
         android:id="@+id/date_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="73dp"
-        android:text="Set the Date"
-        android:textColor="#000000"
+        android:text="@string/set_the_date"
+        android:textColor="@color/barColor"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,18 +26,36 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/dateTextView"
+        android:background="@color/barIconColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_view"></CalendarView>
+        app:layout_constraintTop_toBottomOf="@+id/date_view">
+    </CalendarView>
 
     <TextView
         android:id="@+id/dateTextView"
-        android:layout_width="83dp"
+        android:layout_width="97dp"
         android:layout_height="23dp"
         android:layout_marginBottom="204dp"
+        android:fontFamily="monospace"
         android:text="@string/datetextview"
+        android:textColor="@color/barColor"
+        android:textStyle="bold"
+        android:typeface="monospace"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonFind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/barColor"
+        android:text="@string/find"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -58,7 +58,6 @@ class TodayScreenViewModel : ViewModel() {
 }
 
 
-
 data class TodayPostViewModel(
     val title: String,
     val description: String,

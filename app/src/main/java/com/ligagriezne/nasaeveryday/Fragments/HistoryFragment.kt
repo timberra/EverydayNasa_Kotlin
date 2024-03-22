@@ -5,39 +5,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.CalendarView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.ligagriezne.nasaeveryday.NasaDataModel
+import com.ligagriezne.nasaeveryday.NasaRepositoryImpl
 import com.ligagriezne.nasaeveryday.R
+import com.ligagriezne.nasaeveryday.Result
+import com.ligagriezne.nasaeveryday.Success
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-//
-private var selectedDate: String? = null
-
-/**
- * A simple [Fragment] subclass.
- * Use the [HistoryFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class HistoryFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-
-    }
+    private var selectedDate: String? = null
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -47,30 +32,55 @@ class HistoryFragment : Fragment() {
         val history: View = inflater.inflate(R.layout.fragment_history, container, false)
         val calendarView = history.findViewById<CalendarView>(R.id.calendar)
         val dateText = history.findViewById<TextView>(R.id.dateTextView)
-        calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+        val findButton = history.findViewById<Button>(R.id.buttonFind)
+
+        dateText.text = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
+
+        calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             selectedDate = LocalDate.of(year, month + 1, dayOfMonth).format(DateTimeFormatter.ISO_DATE)
             dateText.text = selectedDate
         }
-        // Inflate the layout for this fragment
+
+        findButton.setOnClickListener {
+            // Call method to fetch data based on selectedDate
+            fetchData(selectedDate)
+        }
+
         return history
     }
 
+    private fun fetchData(selectedDate: String?) {
+        // Ensure selectedDate is not null before making the API call
+        selectedDate?.let {
+            // Make API call to fetch data for the selected date
+            lifecycleScope.launch(Dispatchers.Main) {
+                val result: Result<NasaDataModel> = NasaRepositoryImpl.getPostByDate(selectedDate)
+                handleResult(result)
+            }
+        }
+    }
+
+    private fun handleResult(result: Result<NasaDataModel>) {
+        if (result is Success) {
+            // Data fetched successfully
+            val data = result.data
+            // Pass fetched data to bottom sheet dialog
+            showBottomSheetDialog(data.title, data.date, data.url, data.explanation)
+        } else {
+
+        }
+    }
+
+    private fun showBottomSheetDialog(title: String, date: String, url: String, explanation: String) {
+        val bottomSheetFragment = HistoryBottomSheetDialogFragment.newInstance(title, date, url, explanation)
+        bottomSheetFragment.show(childFragmentManager, bottomSheetFragment.tag)
+    }
+
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HistoryFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             HistoryFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
                 }
             }
     }

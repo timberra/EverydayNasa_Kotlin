@@ -1,13 +1,17 @@
 package com.ligagriezne.nasaeveryday.Fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.ligagriezne.nasaeveryday.databinding.FragmentTodayBinding
 import androidx.fragment.app.viewModels
+import com.ligagriezne.nasaeveryday.DailyPost
+import com.ligagriezne.nasaeveryday.DailyPostDatabase
+import com.ligagriezne.nasaeveryday.databinding.FragmentTodayBinding
+
 
 class TodayFragment : Fragment() {
 
@@ -27,18 +31,35 @@ class TodayFragment : Fragment() {
         super.onResume()
         viewModel.bind()
         viewModel.todayPost.observe(viewLifecycleOwner) { post ->
-            binding.titleText.text = post.title
-            binding.imageView.loadImage(post.imageUrl)
-//            binding.imageView.loadImageWithGlide(post.imageUrl)
-            binding.todayDate.text = post.date
-            binding.description.text = post.description
+            DailyPostViewHolder(binding).bind(
+                post.toDailyPostViewModel {
+                    saveFavoriteToSharedPreferences(requireContext(), post)
+                    Toast.makeText(requireContext(), "Added to favorites", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            )
         }
+
+        // Observe showToast LiveData to display toast messages
         viewModel.showToast.observe(viewLifecycleOwner) { message ->
-            Toast
-                .makeText(context, message, Toast.LENGTH_LONG)
-                .show()
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
         }
+
+        // Set OnClickListener for the title text
         binding.titleText.setOnClickListener { viewModel.onTitleClick() }
+    }
+
+    // Function to save post to SharedPreferences as a favorite
+    private fun saveFavoriteToSharedPreferences(context: Context, post: TodayPostViewModel) {
+        val favoritesDb = DailyPostDatabase(context)
+        favoritesDb.saveToFavorites(
+            DailyPost(
+                post.title,
+                post.date,
+                post.imageUrl,
+                post.description
+            )
+        )
     }
 
     // Called when the view is about to go in background or gets destroyed.
